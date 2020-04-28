@@ -17,15 +17,15 @@ function Summary(){
         <View style={{flexDirection:'row', flex:1}}>
         <View style={{height: 40, borderRightWidth:.5, borderRightColor:'#808080', marginRight:20, flex:1, marginBottom:10}}>
             <Text style={{color:'#3e36e0', marginLeft:5}}> Confirmed</Text>
-    <Text style={{marginLeft:9}}>76768</Text>
+    <Text style={{marginLeft:9}}>{data.globalTotal.cases}</Text>
         </View>
         <View style={{height: 40,borderRightWidth:.5, borderRightColor:'#808080', marginRight:20, flex:1}}>
             <Text style={{color:'#057a4b'}}> Recovered</Text>
-            <Text>7867</Text>
+            <Text>{data.globalTotal.recovered}</Text>
         </View>
         <View style={{height: 40,  marginRight:20, flex:1}}>
             <Text style={{color:'#f01145'}}> Deaths</Text>
-            <Text>667</Text>
+            <Text>{data.globalTotal.deaths}</Text>
         </View>
       </View>
     )
