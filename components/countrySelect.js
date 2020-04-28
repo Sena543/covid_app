@@ -1,33 +1,73 @@
 import React, {useState} from 'react';
-import {Text, View, TouchableOpacity, Modal, Image ,TouchableHighlight} from 'react-native';
-//import CountryPicker from 'react-native-country-picker-modal';
-//import countries from "./src/data/countries";
-import { Ionicons, FontAwesome } from "react-native-vector-icons";
-import CountrySel from './modalComp'
+import {Text, FlatList, View, TouchableOpacity, Modal, Image ,TouchableHighlight} from 'react-native';
+
+import { FontAwesome } from "react-native-vector-icons";
+import CountrySel from './modalComp';
+import {CountryContextProvider} from './context/CountryContext'
+import countries from "./src/data/countries.json";
+import { countriesdata } from './gql/queries';
 
 
 export default function CountrySelect(){
+  const [selected, setSelected] = useState(new Map());
   const [modalVisible, setModalVisible] = useState(false);
   const [country, setCountry] = useState({
-    country: "Ghana",
-    countryInfo: {
-      flag: "https://corona.lmao.ninja/assets/img/flags/gh.png",
-    },
-    result: {
-      tests: 100622,
-      cases: 1550,
-      todayCases: 0,
-      deaths: 11,
-      todayDeaths: 0,
-      recovered: 155,
-      active: 1384,
-      critical: 4,
-      casesPerOneMillion: 50,
-      deathsPerOneMillion: 0,
-      testsPerOneMillion: 3238,
-      updated: "2020-04-27T19:56:41.459Z",
-    },
+    country: "N/A",
+    flag: "N/A",
   });
+  const [data, setData] = useState({
+      tests: "N/A",
+      cases: "N/A",
+      deaths: "N/A",
+      recovered: "N/A",
+      active: "N/A",
+      critical: "N/A",
+      updated: "N/A",
+  
+  })
+
+  const onSelect = React.useCallback(
+    id => {
+      const newSelected = new Map(selected);
+      newSelected.set(id, !selected.get(id));
+      console.log(newSelected)
+      setSelected(newSelected);
+    },
+    [selected],
+  );
+
+  const PrepCountries = ({code, name})=>{
+
+    return(
+      <View  style={{borderTopLeftRadius:30,flex:1,flexDirection:'row', borderBottomWidth:.5, borderBottomStartRadius:20,borderBottomEndRadius:20}}>
+        <View style={{marginLeft:20,marginRight:10, marginTop:20}}>
+            <Image source={{uri:`https://www.countryflags.io/${code}/flat/64.png`}} style={{height:20, width:30}} />
+          </View>
+          <View style={{marginLeft:5,marginRight:90, marginTop:20, marginBottom:20}}>
+            <Text>{name} </Text>
+          </View>
+        </View>
+    )
+  }
+
+  const RenderCountries= ()=>{
+    return(
+      <View>
+      
+      <Text>hhsjh</Text>
+    
+    <FlatList
+    data={countries}
+    renderItem= { ({item })=> <PrepCountries code={item.alpha2Code} name={item.name}
+    selected={!!selected.get(item.id)}
+            onSelect={onSelect}
+    />}
+    keyExtractor={item=> item.alpha2Code}
+    extraData={selected}
+    />
+    </View>
+    )
+  }
 
   const Mod = ({isVisible})=>{
     return(
@@ -36,10 +76,15 @@ export default function CountrySelect(){
      visible={isVisible}
      >
        <TouchableHighlight
-       onPress={()=> setModalVisible(!isVisible)}
+       underlayColor = '#2e2b2b'
+       onPress={()=>{ 
+         setCountry(selected)
+         setModalVisible(!isVisible);
+         console.log(country)
+      }}
        >
        <View>
-         <CountrySel/>
+         <RenderCountries/>
        </View>
        </TouchableHighlight>
      </Modal>
@@ -50,10 +95,10 @@ export default function CountrySelect(){
       <TouchableOpacity
       onPress={ ()=>{setModalVisible(true)}}
       > 
-      <Mod isVisible={modalVisible}/>
+        <Mod isVisible={modalVisible}/>
         <View style={{flex:1,flexDirection:'row',}}>
           <View style={{marginRight:70, marginTop:20}}>
-            <Image source={{uri:country.countryInfo.flag}} style={{height:20, width:30}} />
+            <Image source={{uri:`https://www.countryflags.io/GH/flat/64.png`}} style={{height:20, width:30}} />
           </View>
           <View style={{marginLeft:5,marginRight:90, marginTop:20}}>
             <Text>{country.country} </Text>

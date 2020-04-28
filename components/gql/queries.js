@@ -22,27 +22,32 @@ export const globalCovidData =( gql`
 `)
 
 export const countriesdata = gql`
-  query {
-    countries {
-      country
-      countryInfo {
-        flag
-      }
-      continent
-      result {
-        tests
-        cases
-        todayCases
-        deaths
-        todayDeaths
-        recovered
-        active
-        critical
-        casesPerOneMillion
-        deathsPerOneMillion
-        testsPerOneMillion
-        updated
-      }
+query byCountry($country: String!) {
+  country(name: $country) {
+    country
+    countryInfo {
+      _id
+      lat
+      long
+      flag
+      iso2
+      iso3
+    }
+    continent
+    result {
+      tests
+      cases
+      todayCases
+      deaths
+      todayDeaths
+      recovered
+      active
+      critical
+      casesPerOneMillion
+      deathsPerOneMillion
+      testsPerOneMillion
+      updated
     }
   }
+}
 `;

@@ -8,18 +8,20 @@ import {
     Image
   } from "react-native";
  import countries from "./src/data/countries.json";
-import { countriesdata } from './gql/queries';
+
  
 
 
 export default function CountrySel({ see}) {
   const [visible, setinvisible] = useState(see);
 
-  const RenderCountries = ({flag, name})=>{
+  const RenderCountries = ({code, name})=>{
+
+
     return(
       <View  style={{flex:1,flexDirection:'row'}}>
-        <View style={{marginRight:70, marginTop:20}}>
-            <Image source={{uri:flag}} style={{height:20, width:30}} />
+        <View style={{marginLeft:20,marginRight:10, marginTop:20}}>
+            <Image source={{uri:`https://www.countryflags.io/${code}/flat/64.png`}} style={{height:20, width:30}} />
           </View>
           <View style={{marginLeft:5,marginRight:90, marginTop:20}}>
             <Text>{name} </Text>
@@ -35,8 +37,8 @@ export default function CountrySel({ see}) {
       
       <FlatList
       data={countries}
-      renderItem= { ({item })=> <RenderCountries flag={item.file_url} name={item.name}/>}
-      keyExtractor={item=> item.alpha3}
+      renderItem= { ({item })=> <RenderCountries code={item.alpha2Code} name={item.name}/>}
+      keyExtractor={item=> item.alpha2Code}
       />
       </View>
     )
